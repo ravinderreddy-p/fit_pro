@@ -2,6 +2,8 @@ from typing import List
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
 
+from logger import LOGGER
+
 
 app = FastAPI(docs_url="/apidocs")
 
@@ -21,7 +23,7 @@ class ClientRepository:
 
     def add_client(self, client: Client):
         self._clients.append(client)
-    
+   
     def get_clients(self):
         return self._clients
 
@@ -29,9 +31,11 @@ client_repository = ClientRepository()
 
 @app.get('/clients')
 async def get_clients(request: Request):
+    LOGGER.info("getting all the client details")
     return client_repository.get_clients()
 
 @app.post('/clients', status_code=201)
 async def create_client(request: Request, client: Client):
     client_repository.add_client(client)
+    LOGGER.info("creating a client detail")
     return {"message": "Client created successfully"}
