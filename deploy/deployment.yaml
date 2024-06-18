@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fit-pro-deployment
+  labels:
+    app: fit-pro
+spec:
+  replicas: 3 # Number of pods to deploy
+  selector:
+    matchLabels:
+      app: fit-pro
+  template:
+    metadata:
+      labels:
+        app: fit-pro
+    spec:
+      containers:
+      - name: fit-pro-service
+        image: docker.io/ravipullagurla/fit-pro:latest # Replace with your image
+        ports:
+        - containerPort: 8000 # Replace with your application port
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+      #   volumeMounts:
+      #   - name: config-volume
+      #     mountPath: /app/config # Mount point for your config volume
+      # volumes:
+      # - name: config-volume
+      #   configMap:
+      #     name: my-app-config  # Replace with your ConfigMap name
